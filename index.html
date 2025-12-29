@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Varsha Dresses - Customer Portal</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* OLED DARK MODE */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #000000; 
+            color: #e5e5e5; 
+            padding-bottom: 80px; /* Space for bottom nav */
+        }
+        
+        /* Glassmorphism Elements */
+        .glass-panel {
+            background: rgba(23, 23, 23, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Gold Star Glow */
+        .star-gold { color: #FFD700; filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4)); }
+        .star-gray { color: #333333; }
+
+        /* Invoice Paper Texture Effect */
+        .invoice-paper {
+            background-color: #0F0F0F;
+            background-image: radial-gradient(#1a1a1a 1px, transparent 1px);
+            background-size: 20px 20px;
+            border-top: 4px solid #fff;
+        }
+
+        /* Bottom Nav Active State */
+        .nav-item.active { color: white; }
+        .nav-item.active svg { stroke: #3b82f6; fill: rgba(59, 130, 246, 0.1); }
+        .nav-item { color: #525252; transition: all 0.3s; }
+
+        /* Hide elements for Print */
+        @media print {
+            .no-print, .bottom-nav, .swiper-container, #review-overlay, .shop-section { display: none !important; }
+            body, .invoice-paper { background: white !important; color: black !important; padding: 0 !important; }
+            .text-neutral-400, .text-neutral-500 { color: #666 !important; }
+            .border-neutral-800 { border-color: #ddd !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="review-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+        <div class="glass-panel rounded-2xl p-6 w-full max-w-sm text-center relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-600/20 rounded-full blur-3xl"></div>
+
+            <div class="relative z-10">
+                <div class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-4">VD</div>
+                <h2 class="text-xl font-bold text-white tracking-wide">Welcome Back!</h2>
+                <p class="text-xs text-neutral-400 mt-1 mb-6">Rate your experience to unlock your invoice.</p>
+                
+                <div class="flex justify-center gap-4 text-4xl cursor-pointer mb-2" id="star-container">
+                    <span onclick="rate(1)" class="star-gray transition hover:scale-110">★</span>
+                    <span onclick="rate(2)" class="star-gray transition hover:scale-110">★</span>
+                    <span onclick="rate(3)" class="star-gray transition hover:scale-110">★</span>
+                    <span onclick="rate(4)" class="star-gray transition hover:scale-110">★</span>
+                    <span onclick="rate(5)" class="star-gray transition hover:scale-110">★</span>
+                </div>
+                <p id="feedback-text" class="text-[10px] text-neutral-600 uppercase tracking-widest mt-4">Tap a star</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-home" class="tab-content">
+        
+        <div class="p-5 flex justify-between items-center bg-black/80 backdrop-blur sticky top-0 z-40 border-b border-neutral-900">
+            <div>
+                <h1 class="text-lg font-bold text-white tracking-wider">VARSHA DRESSES</h1>
+                <div class="flex items-center gap-1">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <p class="text-[10px] text-neutral-400">Grand Mall, Raigarh</p>
+                </div>
+            </div>
+            <button class="bg-neutral-800 p-2 rounded-full">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+            </button>
+        </div>
+
+        <div class="swiper-container w-full h-60 bg-neutral-900 mb-6">
+            <div class="swiper mySwiper w-full h-full">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide relative">
+                        <img src="https://images.unsplash.com/photo-1594575111057-47b35c5f98f7?w=800&q=80" class="w-full h-full object-cover opacity-60">
+                        <div class="absolute bottom-6 left-6">
+                            <span class="bg-blue-600 text-white px-2 py-1 text-[10px] font-bold uppercase rounded">Official</span>
+                            <h3 class="text-white font-bold text-2xl mt-1">School Uniforms</h3>
+                            <p class="text-neutral-300 text-xs">KV, DPS & Private Schools</p>
+                        </div>
+                    </div>
+                    <div class="swiper-slide relative">
+                        <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=800&q=80" class="w-full h-full object-cover opacity-60">
+                        <div class="absolute bottom-6 left-6">
+                            <span class="bg-red-600 text-white px-2 py-1 text-[10px] font-bold uppercase rounded">Winter Sale</span>
+                            <h3 class="text-white font-bold text-2xl mt-1">Blazers & Hoodies</h3>
+                            <p class="text-neutral-300 text-xs">Flat 20% Off on Sets</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+
+        <div class="px-4">
+            <div class="invoice-paper rounded-lg p-5 shadow-2xl relative overflow-hidden">
+                
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <p class="text-[10px] text-neutral-500 uppercase tracking-widest mb-1">Tax Invoice</p>
+                        <h2 class="text-2xl font-bold text-white">#VD-8821</h2>
+                        <p class="text-xs text-neutral-400 mt-1">Date: 29 Dec 2025</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="inline-block border border-green-800 bg-green-900/10 text-green-500 text-[10px] px-2 py-1 rounded font-bold uppercase tracking-wider">
+                            Paid via UPI
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6 text-xs">
+                    <div>
+                        <p class="text-neutral-500 mb-1">Billed From:</p>
+                        <p class="text-white font-bold">Varsha Dresses</p>
+                        <p class="text-neutral-400">GSTIN: 22AAAAA0000A1Z5</p>
+                        <p class="text-neutral-400">Grand Mall, Raigarh</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-neutral-500 mb-1">Billed To:</p>
+                        <p class="text-white font-bold">Sahil Agrawal</p>
+                        <p class="text-neutral-400">+91 98765 43210</p>
+                    </div>
+                </div>
+
+                <div class="border-t border-b border-neutral-800 py-4 mb-4">
+                    <div class="flex justify-between text-[10px] text-neutral-500 uppercase tracking-widest mb-3">
+                        <span>Item Description</span>
+                        <span>Amount</span>
+                    </div>
+                    
+                    <div class="flex justify-between text-sm mb-3">
+                        <div>
+                            <p class="text-white font-medium">School Blazer (Navy)</p>
+                            <p class="text-neutral-500 text-xs">Size 40 • Wool Blend</p>
+                        </div>
+                        <span class="text-white font-medium">₹1,250.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm mb-3">
+                        <div>
+                            <p class="text-white font-medium">White Shirt (Cotton)</p>
+                            <p class="text-neutral-500 text-xs">Size 32 • Full Sleeves</p>
+                        </div>
+                        <span class="text-white font-medium">₹450.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <div>
+                            <p class="text-white font-medium">Tie & Belt Combo</p>
+                            <p class="text-neutral-500 text-xs">School Logo Edition</p>
+                        </div>
+                        <span class="text-white font-medium">₹250.00</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2 mb-6">
+                    <div class="flex justify-between text-xs text-neutral-400">
+                        <span>Subtotal</span>
+                        <span>₹1,950.00</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-neutral-400">
+                        <span>CGST (2.5%)</span>
+                        <span>₹48.75</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-neutral-400">
+                        <span>SGST (2.5%)</span>
+                        <span>₹48.75</span>
+                    </div>
+                    <div class="border-t border-dashed border-neutral-700 pt-3 flex justify-between text-lg font-bold text-white">
+                        <span>Grand Total</span>
+                        <span>₹2,047.50</span>
+                    </div>
+                </div>
+
+                <div class="bg-neutral-900 rounded p-3 text-center">
+                    <p class="text-[10px] text-neutral-500">Thank you for your business!</p>
+                    <p class="text-[10px] text-neutral-600 mt-1">Returns accepted within 7 days with tag.</p>
+                </div>
+
+                <button onclick="window.print()" class="no-print w-full mt-4 bg-white text-black py-3 rounded-lg font-bold flex justify-center items-center gap-2 active:bg-neutral-300 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m0 0h8"></path></svg>
+                    Download PDF
+                </button>
+            </div>
+        </div>
+
+        <div class="shop-section px-4 mt-8 mb-4">
+            <h3 class="text-xs font-bold text-neutral-500 mb-4 uppercase tracking-widest flex items-center gap-2">
+                <span>Complete Your Look</span>
+                <span class="h-px bg-neutral-800 flex-grow"></span>
+            </h3>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <a href="#" class="block bg-neutral-900 p-3 rounded-lg border border-neutral-800 active:border-neutral-600 transition">
+                    <div class="h-28 w-full bg-neutral-800 mb-3 rounded overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&q=80" class="w-full h-full object-cover opacity-80">
+                    </div>
+                    <p class="text-xs font-bold text-white">Black School Shoes</p>
+                    <p class="text-[10px] text-neutral-500 mt-1">Lakhani / Bata Available</p>
+                    <p class="text-[10px] text-blue-500 mt-2 font-bold">Shop Now →</p>
+                </a>
+                
+                <a href="#" class="block bg-neutral-900 p-3 rounded-lg border border-neutral-800 active:border-neutral-600 transition">
+                    <div class="h-28 w-full bg-neutral-800 mb-3 rounded overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=400&q=80" class="w-full h-full object-cover opacity-80">
+                    </div>
+                    <p class="text-xs font-bold text-white">Winter Accessories</p>
+                    <p class="text-[10px] text-neutral-500 mt-1">Caps, Gloves & Socks</p>
+                    <p class="text-[10px] text-blue-500 mt-2 font-bold">Shop Now →</p>
+                </a>
+            </div>
+        </div>
+        
+        <div class="h-8"></div>
+    </div>
+
+
+    <div id="tab-history" class="tab-content hidden px-4 pt-12">
+        <h2 class="text-2xl font-bold text-white mb-6">Order History</h2>
+        
+        <div class="space-y-4">
+            <div class="glass-panel p-4 rounded-xl flex justify-between items-center">
+                <div class="flex gap-4 items-center">
+                    <div class="w-10 h-10 bg-neutral-800 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                        24<br>OCT
+                    </div>
+                    <div>
+                        <p class="text-white font-bold text-sm">Winter Jacket Set</p>
+                        <p class="text-neutral-500 text-xs">3 Items • Delivered</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-white font-bold text-sm">₹3,200</p>
+                    <p class="text-green-500 text-[10px]">Paid</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-xl flex justify-between items-center">
+                <div class="flex gap-4 items-center">
+                    <div class="w-10 h-10 bg-neutral-800 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                        12<br>AUG
+                    </div>
+                    <div>
+                        <p class="text-white font-bold text-sm">School Shoes</p>
+                        <p class="text-neutral-500 text-xs">1 Item • Delivered</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-white font-bold text-sm">₹899</p>
+                    <p class="text-green-500 text-[10px]">Paid</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="tab-profile" class="tab-content hidden px-4 pt-12 text-center">
+        <div class="w-24 h-24 bg-neutral-800 rounded-full mx-auto mb-4 border-2 border-neutral-700 flex items-center justify-center overflow-hidden">
+             <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" class="w-full h-full object-cover">
+        </div>
+        <h2 class="text-xl font-bold text-white">Sahil Agrawal</h2>
+        <p class="text-neutral-500 text-sm mb-8">+91 98765 43210</p>
+
+        <div class="glass-panel rounded-xl text-left overflow-hidden">
+            <div class="p-4 border-b border-neutral-800 flex justify-between">
+                <span class="text-neutral-300 text-sm">My Address</span>
+                <span class="text-neutral-500 text-xs">Edit</span>
+            </div>
+            <div class="p-4 border-b border-neutral-800 flex justify-between">
+                <span class="text-neutral-300 text-sm">School Details</span>
+                <span class="text-neutral-500 text-xs">KV Raigarh</span>
+            </div>
+            <div class="p-4 flex justify-between">
+                <span class="text-red-400 text-sm">Log Out</span>
+            </div>
+        </div>
+        
+        <p class="text-neutral-600 text-[10px] mt-8">App Version 1.0.4</p>
+    </div>
+
+
+    <div class="bottom-nav fixed bottom-0 left-0 w-full bg-black/90 backdrop-blur-lg border-t border-neutral-800 py-3 px-6 z-50 flex justify-between items-center">
+        <button onclick="switchTab('home')" class="nav-item active flex flex-col items-center gap-1" id="btn-home">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <span class="text-[10px] font-medium">Invoice</span>
+        </button>
+        
+        <button onclick="switchTab('history')" class="nav-item flex flex-col items-center gap-1" id="btn-history">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="text-[10px] font-medium">History</span>
+        </button>
+        
+        <button onclick="switchTab('profile')" class="nav-item flex flex-col items-center gap-1" id="btn-profile">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            <span class="text-[10px] font-medium">Profile</span>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // 1. NAVIGATION LOGIC
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            // Show selected tab
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+            
+            // Update active state on buttons
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-' + tabName).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0,0);
+        }
+
+        // 2. SLIDER CONFIG
+        var swiper = new Swiper(".mySwiper", {
+            spaceBetween: 0,
+            centeredSlides: true,
+            loop: true,
+            speed: 800,
+            autoplay: { delay: 3000, disableOnInteraction: false },
+            pagination: { el: ".swiper-pagination", clickable: true },
+        });
+
+        // 3. REVIEW LOGIC (Google Link Updated)
+        const GOOGLE_REVIEW_LINK = "https://www.google.com/search?q=varsha+dresses+raigarh"; 
+
+        function rate(stars) {
+            const overlay = document.getElementById('review-overlay');
+            const feedbackText = document.getElementById('feedback-text');
+            const starContainer = document.getElementById('star-container');
+
+            let allStars = starContainer.children;
+            for(let i=0; i<5; i++) {
+                if(i < stars) {
+                    allStars[i].classList.remove('star-gray');
+                    allStars[i].classList.add('star-gold');
+                } else {
+                    allStars[i].classList.add('star-gray');
+                    allStars[i].classList.remove('star-gold');
+                }
+            }
+
+            if (stars >= 4) {
+                feedbackText.innerText = "OPENING GOOGLE MAPS...";
+                feedbackText.style.color = "#4ade80";
+                setTimeout(() => {
+                    window.open(GOOGLE_REVIEW_LINK, '_blank');
+                    overlay.style.display = 'none';
+                }, 600); 
+            } else {
+                feedbackText.innerText = "Thank you for feedback!";
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 600);
+            }
+        }
+    </script>
+</body>
+</html>
